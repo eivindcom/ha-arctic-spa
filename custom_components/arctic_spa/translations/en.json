@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "IP Address"
+        },
+        "data_description": {
+          "host": "The local IP address of your Arctic Spa (e.g. 192.168.1.244)"
+        },
+        "description": "Connect to your Arctic Spa on the local network"
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the spa. Make sure the IP is correct and the Arctic Spa app is closed (only one connection allowed).",
+      "unknown": "An unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "This spa is already configured"
+    }
+  },
+  "entity": {
+    "climate": {
+      "thermostat": { "name": "Thermostat" }
+    },
+    "fan": {
+      "pump": { "name": "Pump {index}" },
+      "blower": { "name": "Blower {index}" }
+    },
+    "light": {
+      "light": { "name": "Light" }
+    },
+    "switch": {
+      "stereo": { "name": "Stereo" },
+      "onzen": { "name": "Onzen" },
+      "ozone": { "name": "Ozone" },
+      "exhaust_fan": { "name": "Exhaust fan" },
+      "filter": { "name": "Filter" },
+      "fogger": { "name": "Fogger" }
+    },
+    "sensor": {
+      "water_temperature": { "name": "Water temperature" },
+      "setpoint_temperature": { "name": "Setpoint temperature" },
+      "heater_1_status": { "name": "Heater 1" },
+      "heater_2_status": { "name": "Heater 2" },
+      "filter_status": { "name": "Filter status" },
+      "ozone_status": { "name": "Ozone status" },
+      "ph": { "name": "pH" },
+      "orp": { "name": "ORP" },
+      "heater_adc": { "name": "Heater ADC" },
+      "current_adc": { "name": "Current ADC" },
+      "powerlines": { "name": "Power phase" },
+      "breaker_size": { "name": "Breaker size" }
+    }
+  }
+}

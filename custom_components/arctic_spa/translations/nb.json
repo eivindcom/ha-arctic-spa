@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "host": "IP-adresse"
+        },
+        "data_description": {
+          "host": "Lokal IP-adresse til Arctic Spa (f.eks. 192.168.1.244)"
+        },
+        "description": "Koble til Arctic Spa på lokalnettverket"
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan ikke koble til spaen. Sjekk at IP-adressen er riktig og at Arctic Spa-appen er lukket (kun en tilkobling tillatt).",
+      "unknown": "En uventet feil oppstod"
+    },
+    "abort": {
+      "already_configured": "Denne spaen er allerede konfigurert"
+    }
+  },
+  "entity": {
+    "climate": {
+      "thermostat": { "name": "Termostat" }
+    },
+    "fan": {
+      "pump": { "name": "Pumpe {index}" },
+      "blower": { "name": "Blower {index}" }
+    },
+    "light": {
+      "light": { "name": "Lys" }
+    },
+    "switch": {
+      "stereo": { "name": "Stereo" },
+      "onzen": { "name": "Onzen" },
+      "ozone": { "name": "Ozon" },
+      "exhaust_fan": { "name": "Vifte" },
+      "filter": { "name": "Filter" },
+      "fogger": { "name": "Tåkemaskin" }
+    },
+    "sensor": {
+      "water_temperature": { "name": "Vanntemperatur" },
+      "setpoint_temperature": { "name": "Settpunkt" },
+      "heater_1_status": { "name": "Varmer 1" },
+      "heater_2_status": { "name": "Varmer 2" },
+      "filter_status": { "name": "Filterstatus" },
+      "ozone_status": { "name": "Ozonstatus" },
+      "ph": { "name": "pH" },
+      "orp": { "name": "ORP" },
+      "heater_adc": { "name": "Varmer ADC" },
+      "current_adc": { "name": "Strøm ADC" },
+      "powerlines": { "name": "Strømfase" },
+      "breaker_size": { "name": "Sikring" }
+    }
+  }
+}
