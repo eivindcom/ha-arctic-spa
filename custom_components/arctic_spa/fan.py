@@ -84,7 +84,10 @@ class ArcticSpaPump(ArcticSpaEntity, FanEntity):
         )
 
     async def async_turn_on(
-        self, percentage: int | None = None, **kwargs
+        self,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
+        **kwargs,
     ) -> None:
         """Turn on the pump."""
         await self.async_set_percentage(percentage or 100)
