@@ -50,7 +50,8 @@
       "heater_adc": { "name": "Varmer ADC" },
       "current_adc": { "name": "Strøm ADC" },
       "powerlines": { "name": "Strømfase" },
-      "breaker_size": { "name": "Sikring" }
+      "breaker_size": { "name": "Sikring" },
+      "estimated_power": { "name": "Estimert effekt" }
     }
   }
 }

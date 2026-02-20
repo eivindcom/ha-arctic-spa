@@ -11,7 +11,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfTemperature
+from homeassistant.const import UnitOfPower, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -108,7 +108,18 @@ SENSORS: list[SensorConfig] = [
         source="config",
         live_key="breaker_size",
     ),
+    SensorConfig(
+        "estimated_power", "estimated_power",
+        icon="mdi:lightning-bolt",
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+        unit=UnitOfPower.KILO_WATT,
+        source="computed",
+    ),
 ]
+
+# Estimated power per heater in kW (typical for Arctic Spa ~3kW elements)
+HEATER_POWER_KW = 3.0
 
 
 async def async_setup_entry(
@@ -158,6 +169,8 @@ class ArcticSpaSensor(ArcticSpaEntity, SensorEntity):
                 return self._client.temperature_celsius
             if cfg.key == "setpoint_temperature":
                 return self._client.temperature_setpoint_celsius
+            if cfg.key == "estimated_power":
+                return self._estimate_power()
             return None
 
         if cfg.source == "info":
@@ -186,3 +199,23 @@ class ArcticSpaSensor(ArcticSpaEntity, SensorEntity):
             return None
         key = cfg.live_key or cfg.key
         return self._client.live.get(key)
+
+    def _estimate_power(self) -> float | None:
+        """Estimate power consumption based on heater status.
+
+        Each heater element draws approximately 3 kW when actively heating.
+        WARMUP/COOLDOWN states are counted at half power as the element is
+        ramping up or down.
+        """
+        if not self._client.live:
+            return None
+
+        power = 0.0
+        for heater in ("heater_1", "heater_2"):
+            status = self._client.live.get(heater)
+            if status == "HEATING":
+                power += HEATER_POWER_KW
+            elif status in ("WARMUP", "COOLDOWN"):
+                power += HEATER_POWER_KW * 0.5
+
+        return round(power, 1)

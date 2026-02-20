@@ -50,7 +50,8 @@
       "heater_adc": { "name": "Heater ADC" },
       "current_adc": { "name": "Current ADC" },
       "powerlines": { "name": "Power phase" },
-      "breaker_size": { "name": "Breaker size" }
+      "breaker_size": { "name": "Breaker size" },
+      "estimated_power": { "name": "Estimated power" }
     }
   }
 }
