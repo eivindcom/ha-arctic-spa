@@ -59,7 +59,7 @@
       "current_adc": { "name": "Current ADC" },
       "powerlines": { "name": "Power phase" },
       "breaker_size": { "name": "Breaker size" },
-      "estimated_power": { "name": "Estimated power" }
+      "power": { "name": "Power" }
     }
   }
 }

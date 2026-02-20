@@ -51,7 +51,7 @@
       "current_adc": { "name": "Strøm ADC" },
       "powerlines": { "name": "Strømfase" },
       "breaker_size": { "name": "Sikring" },
-      "estimated_power": { "name": "Estimert effekt" }
+      "power": { "name": "Effekt" }
     }
   }
 }

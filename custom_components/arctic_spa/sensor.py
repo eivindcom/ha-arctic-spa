@@ -109,7 +109,7 @@ SENSORS: list[SensorConfig] = [
         live_key="breaker_size",
     ),
     SensorConfig(
-        "estimated_power", "estimated_power",
+        "power", "power",
         icon="mdi:lightning-bolt",
         device_class=SensorDeviceClass.POWER,
         state_class=SensorStateClass.MEASUREMENT,
@@ -118,8 +118,9 @@ SENSORS: list[SensorConfig] = [
     ),
 ]
 
-# Estimated power per heater in kW (typical for Arctic Spa ~3kW elements)
-HEATER_POWER_KW = 3.0
+# ADC-to-watt conversion factor, calibrated against 2x 3kW heater elements
+# on a 400V 3-phase (TN) 16A installation. current_adc 12596 = 6000W.
+ADC_TO_WATT = 0.4763
 
 
 async def async_setup_entry(
@@ -169,8 +170,8 @@ class ArcticSpaSensor(ArcticSpaEntity, SensorEntity):
                 return self._client.temperature_celsius
             if cfg.key == "setpoint_temperature":
                 return self._client.temperature_setpoint_celsius
-            if cfg.key == "estimated_power":
-                return self._estimate_power()
+            if cfg.key == "power":
+                return self._get_power()
             return None
 
         if cfg.source == "info":
@@ -200,22 +201,18 @@ class ArcticSpaSensor(ArcticSpaEntity, SensorEntity):
         key = cfg.live_key or cfg.key
         return self._client.live.get(key)
 
-    def _estimate_power(self) -> float | None:
-        """Estimate power consumption based on heater status.
+    def _get_power(self) -> float | None:
+        """Calculate power consumption from current_adc sensor.
 
-        Each heater element draws approximately 3 kW when actively heating.
-        WARMUP/COOLDOWN states are counted at half power as the element is
-        ramping up or down.
+        Uses a calibrated conversion factor (ADC_TO_WATT) derived from
+        measuring current_adc with known heater load (2x ~3kW = 6kW).
         """
         if not self._client.live:
             return None
 
-        power = 0.0
-        for heater in ("heater_1", "heater_2"):
-            status = self._client.live.get(heater)
-            if status == "HEATING":
-                power += HEATER_POWER_KW
-            elif status in ("WARMUP", "COOLDOWN"):
-                power += HEATER_POWER_KW * 0.5
+        adc = self._client.live.get("current_adc")
+        if adc is None:
+            return None
 
-        return round(power, 1)
+        watts = adc * ADC_TO_WATT
+        return round(watts / 1000, 2)

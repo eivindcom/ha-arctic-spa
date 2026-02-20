@@ -67,7 +67,7 @@ Entities are created dynamically based on what hardware your spa reports:
 | Current ADC | Sensor | Raw current sensor value |
 | Power phase | Sensor | Electrical phase configuration |
 | Breaker size | Sensor | Circuit breaker rating (A) |
-| Estimated power | Sensor | Estimated heater power consumption (kW) |
+| Power | Sensor | Power consumption calculated from current sensor (kW) |
 
 ## Energy Saving with Tibber
 
