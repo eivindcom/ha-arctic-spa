@@ -46,6 +46,8 @@ class ArcticSpaClient:
         self.live: dict[str, Any] | None = None
         self.info: dict[str, Any] | None = None
         self.config: dict[str, Any] | None = None
+        self.onzen_settings: dict[str, Any] | None = None
+        self._onzen_raw: bytes | None = None  # Raw payload for read-modify-write
         self.last_update: datetime | None = None
 
     @property
@@ -185,11 +187,13 @@ class ArcticSpaClient:
         cycle = self._poll_cycle
 
         # 16-cycle pattern: PING, LIVE, LIVE, LIVE, CONFIG, LIVE, LIVE, LIVE,
-        #                    INFO, LIVE, LIVE, LIVE, PING, LIVE, LIVE, LIVE
+        #                    INFO, LIVE, LIVE, LIVE, ONZEN, LIVE, LIVE, LIVE
         if cycle % 16 == 4:
             msg_type = MessageType.CONFIGURATION
         elif cycle % 16 == 8:
             msg_type = MessageType.INFORMATION
+        elif cycle % 16 == 12:
+            msg_type = MessageType.ONZEN_SETTINGS
         elif cycle % 4 == 0:
             msg_type = MessageType.PING
         else:
@@ -231,6 +235,11 @@ class ArcticSpaClient:
                 self.config = self._proto_to_dict(msg, spa_pb2.spa_configuration)
                 self._fire_callbacks()
 
+            elif packet.msg_type == MessageType.ONZEN_SETTINGS and packet.payload:
+                self._onzen_raw = packet.payload
+                self.onzen_settings = self._parse_onzen_settings(packet.payload)
+                self._fire_callbacks()
+
         except Exception as err:
             _LOGGER.error("Error parsing %s packet: %s", packet.type_name, err)
 
@@ -261,6 +270,105 @@ class ArcticSpaClient:
                 self.info["ph"] = ph_raw / 200.0
         except (ValueError, IndexError):
             pass
+
+    @staticmethod
+    def _parse_onzen_settings(payload: bytes) -> dict[str, Any]:
+        """Parse ONZEN_SETTINGS protobuf fields into a dict."""
+        result: dict[str, Any] = {}
+        i = 0
+        while i < len(payload):
+            tag = payload[i]
+            field_num = tag >> 3
+            wire_type = tag & 0x07
+            i += 1
+            if wire_type == 0:  # Varint
+                val = 0
+                shift = 0
+                while i < len(payload):
+                    byte = payload[i]
+                    i += 1
+                    val |= (byte & 0x7F) << shift
+                    shift += 7
+                    if not (byte & 0x80):
+                        break
+                result[f"field_{field_num}"] = val
+            elif wire_type == 2:  # Length-delimited
+                if i < len(payload):
+                    length = payload[i]
+                    i += 1
+                    i += length
+            else:
+                break
+
+        # Field 12 = duration in units of 1/100th hour
+        if "field_12" in result:
+            result["duration_hours"] = result["field_12"] / 100.0
+
+        return result
+
+    @staticmethod
+    def _encode_varint(value: int) -> bytes:
+        """Encode an integer as a protobuf varint."""
+        result = bytearray()
+        while value > 0x7F:
+            result.append((value & 0x7F) | 0x80)
+            value >>= 7
+        result.append(value & 0x7F)
+        return bytes(result)
+
+    async def set_onzen_duration(self, hours: float) -> bool:
+        """Set the Onzen duration in hours per day.
+
+        Uses read-modify-write on the raw ONZEN_SETTINGS payload,
+        replacing field 12 with the new duration value.
+        """
+        if not self._connected or not self._writer or not self._onzen_raw:
+            return False
+
+        new_val = int(hours * 100)
+        old_payload = self._onzen_raw
+
+        # Find field 12 tag (0x60) and its varint value in the raw payload
+        i = 0
+        new_payload = bytearray()
+        while i < len(old_payload):
+            tag = old_payload[i]
+            field_num = tag >> 3
+            wire_type = tag & 0x07
+            start = i
+            i += 1
+
+            if wire_type == 0:  # Varint
+                while i < len(old_payload) and old_payload[i] & 0x80:
+                    i += 1
+                i += 1  # Last byte of varint
+
+                if field_num == 12:
+                    # Replace this field's value
+                    new_payload.append(tag)
+                    new_payload.extend(self._encode_varint(new_val))
+                else:
+                    new_payload.extend(old_payload[start:i])
+            elif wire_type == 2:  # Length-delimited
+                length = old_payload[i]
+                i += 1 + length
+                new_payload.extend(old_payload[start:i])
+            else:
+                new_payload.extend(old_payload[start:i])
+                break
+
+        try:
+            packet = create_packet(
+                MessageType.ONZEN_SETTINGS, bytes(new_payload), self._sequence
+            )
+            self._writer.write(packet)
+            await self._writer.drain()
+            self._sequence += 1
+            _LOGGER.debug("Onzen duration set to %.1f hours", hours)
+            return True
+        except Exception as err:
+            _LOGGER.error("Onzen settings write error: %s", err)
+            return False
 
     async def send_command(self, **kwargs: Any) -> bool:
         """Send a command to the spa.
