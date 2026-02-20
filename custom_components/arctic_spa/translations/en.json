@@ -39,9 +39,6 @@
       "fogger": { "name": "Fogger" },
       "eco_mode": { "name": "Eco mode" }
     },
-    "number": {
-      "onzen_duration": { "name": "Onzen duration" }
-    },
     "sensor": {
       "water_temperature": { "name": "Water temperature" },
       "setpoint_temperature": { "name": "Setpoint temperature" },

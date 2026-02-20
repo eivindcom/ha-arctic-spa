@@ -39,9 +39,6 @@
       "fogger": { "name": "Tåkemaskin" },
       "eco_mode": { "name": "Strømsparemodus" }
     },
-    "number": {
-      "onzen_duration": { "name": "Onzen varighet" }
-    },
     "sensor": {
       "water_temperature": { "name": "Vanntemperatur" },
       "setpoint_temperature": { "name": "Settpunkt" },

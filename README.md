@@ -57,7 +57,6 @@ Entities are created dynamically based on what hardware your spa reports:
 | Exhaust fan | Switch | Ventilation fan |
 | Fogger | Switch | Fog machine |
 | Eco mode | Switch | Lowers setpoint by 5°C to save energy |
-| Onzen duration | Number | Salt cell run time (hours per day) |
 | Water temperature | Sensor | Current water temperature (C) |
 | Setpoint temperature | Sensor | Target temperature (C) |
 | Heater 1/2 | Sensor | Heater status (idle/warmup/heating/cooldown) |
