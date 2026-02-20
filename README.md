@@ -56,6 +56,7 @@ Entities are created dynamically based on what hardware your spa reports:
 | Filter | Switch | Filtration system |
 | Exhaust fan | Switch | Ventilation fan |
 | Fogger | Switch | Fog machine |
+| Eco mode | Switch | Lowers setpoint by 5°C to save energy |
 | Water temperature | Sensor | Current water temperature (C) |
 | Setpoint temperature | Sensor | Target temperature (C) |
 | Heater 1/2 | Sensor | Heater status (idle/warmup/heating/cooldown) |
@@ -71,36 +72,34 @@ Entities are created dynamically based on what hardware your spa reports:
 
 ## Energy Saving with Tibber
 
-Use the Tibber integration to automatically lower the spa temperature during expensive electricity hours:
+The integration includes an **Eco mode** switch that lowers the setpoint by 5°C and restores it when turned off. Use this with Tibber to automatically save energy during expensive hours:
 
 ```yaml
 automation:
-  - alias: "Spa: Lower temp during expensive electricity"
+  - alias: "Spa: Eco mode on during expensive electricity"
     trigger:
       - platform: numeric_state
         entity_id: sensor.electricity_price
         above: 2.0
     action:
-      - service: climate.set_temperature
+      - service: switch.turn_on
         target:
-          entity_id: climate.arctic_spa
-        data:
-          temperature: 36
+          entity_id: switch.arctic_spa_eco_mode
 
-  - alias: "Spa: Restore temp during cheap electricity"
+  - alias: "Spa: Eco mode off during cheap electricity"
     trigger:
       - platform: numeric_state
         entity_id: sensor.electricity_price
         below: 0.5
     action:
-      - service: climate.set_temperature
+      - service: switch.turn_off
         target:
-          entity_id: climate.arctic_spa
-        data:
-          temperature: 39
+          entity_id: switch.arctic_spa_eco_mode
 ```
 
-The spa's insulation keeps the water warm for hours without heating, so this can significantly reduce electricity costs without affecting your spa experience.
+You can also use `climate.set_temperature` directly for more precise control. The spa's insulation keeps the water warm for hours without heating, so this can significantly reduce electricity costs without affecting your spa experience.
+
+The **Power** sensor (`sensor.arctic_spa_power`) shows real-time power consumption in kW, calculated from the spa's built-in current sensor.
 
 ## Protocol
 

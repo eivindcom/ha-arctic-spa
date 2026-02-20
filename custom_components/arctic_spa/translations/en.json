@@ -36,7 +36,8 @@
       "ozone": { "name": "Ozone" },
       "exhaust_fan": { "name": "Exhaust fan" },
       "filter": { "name": "Filter" },
-      "fogger": { "name": "Fogger" }
+      "fogger": { "name": "Fogger" },
+      "eco_mode": { "name": "Eco mode" }
     },
     "sensor": {
       "water_temperature": { "name": "Water temperature" },

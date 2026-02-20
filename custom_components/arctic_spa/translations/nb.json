@@ -36,7 +36,8 @@
       "ozone": { "name": "Ozon" },
       "exhaust_fan": { "name": "Vifte" },
       "filter": { "name": "Filter" },
-      "fogger": { "name": "Tåkemaskin" }
+      "fogger": { "name": "Tåkemaskin" },
+      "eco_mode": { "name": "Strømsparemodus" }
     },
     "sensor": {
       "water_temperature": { "name": "Vanntemperatur" },

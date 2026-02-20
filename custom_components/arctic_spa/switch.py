@@ -9,8 +9,13 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from homeassistant.helpers.restore_state import RestoreEntity
+
 from .entity import ArcticSpaEntity
 from .spa_client import ArcticSpaClient
+
+# Eco mode lowers setpoint by this many degrees Fahrenheit (5°C ≈ 9°F)
+ECO_OFFSET_F = 9
 
 
 @dataclass
@@ -55,6 +60,9 @@ async def async_setup_entry(
                 continue
         entities.append(ArcticSpaSwitch(client, sw))
 
+    # Always add eco mode switch
+    entities.append(ArcticSpaEcoSwitch(client))
+
     async_add_entities(entities)
 
 
@@ -87,3 +95,71 @@ class ArcticSpaSwitch(ArcticSpaEntity, SwitchEntity):
     async def async_turn_off(self, **kwargs) -> None:
         """Turn off the feature."""
         await self._client.send_command(**{self._config.command_key: False})
+
+
+class ArcticSpaEcoSwitch(ArcticSpaEntity, SwitchEntity, RestoreEntity):
+    """Eco mode switch that lowers the setpoint by 5°C to save energy.
+
+    When activated, saves the current setpoint and lowers it by 5°C.
+    When deactivated, restores the original setpoint.
+    Survives HA restarts via RestoreEntity.
+    """
+
+    _attr_translation_key = "eco_mode"
+    _attr_icon = "mdi:leaf"
+
+    def __init__(self, client: ArcticSpaClient) -> None:
+        super().__init__(client, "eco_mode")
+        self._is_on = False
+        self._saved_setpoint_f: int | None = None
+
+    async def async_added_to_hass(self) -> None:
+        """Restore state on HA restart."""
+        await super().async_added_to_hass()
+        last_state = await self.async_get_last_state()
+        if last_state:
+            self._is_on = last_state.state == "on"
+            # Restore saved setpoint from attributes
+            saved = last_state.attributes.get("saved_setpoint_f")
+            if saved is not None:
+                self._saved_setpoint_f = int(saved)
+
+    @property
+    def is_on(self) -> bool:
+        """Return True if eco mode is active."""
+        return self._is_on
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Store saved setpoint for restore after HA restart."""
+        attrs = {}
+        if self._saved_setpoint_f is not None:
+            attrs["saved_setpoint_f"] = self._saved_setpoint_f
+            attrs["saved_setpoint_c"] = round(
+                (self._saved_setpoint_f - 32) * 5 / 9, 1
+            )
+        return attrs
+
+    async def async_turn_on(self, **kwargs) -> None:
+        """Activate eco mode: save setpoint and lower by 5°C."""
+        current_f = self._client.temperature_setpoint_fahrenheit
+        if current_f is None:
+            return
+
+        self._saved_setpoint_f = current_f
+        target_f = max(current_f - ECO_OFFSET_F, 80)  # Don't go below 80°F (26.7°C)
+        await self._client.send_command(
+            set_temperature_setpoint_fahrenheit=target_f
+        )
+        self._is_on = True
+        self.async_write_ha_state()
+
+    async def async_turn_off(self, **kwargs) -> None:
+        """Deactivate eco mode: restore original setpoint."""
+        if self._saved_setpoint_f is not None:
+            await self._client.send_command(
+                set_temperature_setpoint_fahrenheit=self._saved_setpoint_f
+            )
+            self._saved_setpoint_f = None
+        self._is_on = False
+        self.async_write_ha_state()

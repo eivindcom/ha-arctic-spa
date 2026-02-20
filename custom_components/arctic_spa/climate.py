@@ -81,5 +81,5 @@ class ArcticSpaClimate(ArcticSpaEntity, ClimateEntity):
             await self._client.set_temperature(temp_c)
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
-        """Set HVAC mode (no direct economy toggle available)."""
+        """Set HVAC mode (economy mode not available via protocol)."""
         pass
