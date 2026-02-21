@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480">
+  <defs>
+    <radialGradient id="water" cx="50%" cy="55%" r="45%">
+      <stop offset="0%" style="stop-color:#4fc3f7;stop-opacity:0.9"/>
+      <stop offset="60%" style="stop-color:#0288d1;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#01579b;stop-opacity:1"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="35%">
+      <stop offset="0%" style="stop-color:#81d4fa;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#0288d1;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#546e7a"/>
+      <stop offset="50%" style="stop-color:#37474f"/>
+      <stop offset="100%" style="stop-color:#263238"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.5"/>
+    </filter>
+    <filter id="innerShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" result="blur"/>
+      <feOffset dx="0" dy="3"/>
+      <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feFlood flood-color="#01579b" flood-opacity="0.6"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Bubble animation -->
+    <circle id="bubble" r="3" fill="white" opacity="0.15"/>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="480" rx="16" fill="#1a1a2e"/>
+
+  <!-- Spa outer shell -->
+  <rect x="60" y="60" width="680" height="360" rx="40" fill="url(#edge)" filter="url(#shadow)"/>
+
+  <!-- Spa inner (water) -->
+  <rect x="75" y="75" width="650" height="330" rx="32" fill="url(#water)" filter="url(#innerShadow)"/>
+
+  <!-- Water glow effect -->
+  <rect x="75" y="75" width="650" height="330" rx="32" fill="url(#glow)"/>
+
+  <!-- Subtle wave lines -->
+  <path d="M120 200 Q200 190 280 200 Q360 210 440 200 Q520 190 600 200 Q660 207 680 205" stroke="rgba(255,255,255,0.08)" stroke-width="2" fill="none"/>
+  <path d="M120 240 Q200 250 280 240 Q360 230 440 240 Q520 250 600 240 Q660 235 680 237" stroke="rgba(255,255,255,0.06)" stroke-width="2" fill="none"/>
+  <path d="M120 280 Q200 270 280 280 Q360 290 440 280 Q520 270 600 280 Q660 287 680 283" stroke="rgba(255,255,255,0.05)" stroke-width="2" fill="none"/>
+
+  <!-- Seat indicators (subtle) -->
+  <rect x="100" y="320" width="120" height="50" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect x="240" y="320" width="120" height="50" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect x="440" y="320" width="120" height="50" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect x="580" y="320" width="120" height="50" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Jet indicators -->
+  <circle cx="160" cy="310" r="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <circle cx="300" cy="310" r="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <circle cx="500" cy="310" r="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <circle cx="640" cy="310" r="6" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+
+  <!-- Corner accent lights -->
+  <circle cx="105" cy="105" r="4" fill="#4fc3f7" opacity="0.4"/>
+  <circle cx="695" cy="105" r="4" fill="#4fc3f7" opacity="0.4"/>
+  <circle cx="105" cy="375" r="4" fill="#4fc3f7" opacity="0.4"/>
+  <circle cx="695" cy="375" r="4" fill="#4fc3f7" opacity="0.4"/>
+</svg>
