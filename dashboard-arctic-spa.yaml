@@ -29,7 +29,7 @@ views:
 
               # --- Tittel ---
               - type: state-label
-                entity: climate.arctic_spa_thermostat
+                entity: climate.boblebad
                 style:
                   top: 6%
                   left: 50%
@@ -43,7 +43,7 @@ views:
 
               # --- Vanntemperatur (stor) ---
               - type: state-label
-                entity: sensor.arctic_spa_water_temperature
+                entity: sensor.boblebad_water_temperature
                 style:
                   top: 35%
                   left: 50%
@@ -55,7 +55,7 @@ views:
 
               # --- Settpunkt ---
               - type: state-label
-                entity: sensor.arctic_spa_setpoint_temperature
+                entity: sensor.boblebad_setpoint_temperature
                 style:
                   top: 50%
                   left: 50%
@@ -67,7 +67,7 @@ views:
 
               # --- Effekt (kW) ---
               - type: state-label
-                entity: sensor.arctic_spa_power
+                entity: sensor.boblebad_power
                 style:
                   top: 12%
                   left: 88%
@@ -87,7 +87,7 @@ views:
 
               # --- Varmer 1 status ---
               - type: state-label
-                entity: sensor.arctic_spa_heater_1
+                entity: sensor.boblebad_heater_1
                 style:
                   top: 12%
                   left: 15%
@@ -99,7 +99,7 @@ views:
 
               # --- Varmer 2 status ---
               - type: state-label
-                entity: sensor.arctic_spa_heater_2
+                entity: sensor.boblebad_heater_2
                 style:
                   top: 18%
                   left: 15%
@@ -111,7 +111,7 @@ views:
 
               # --- Lys-knapp ---
               - type: state-icon
-                entity: light.arctic_spa_light
+                entity: light.boblebad_light
                 tap_action:
                   action: toggle
                 style:
@@ -124,7 +124,7 @@ views:
 
               # --- Eco mode ---
               - type: state-icon
-                entity: switch.arctic_spa_eco_mode
+                entity: switch.boblebad_eco_mode
                 tap_action:
                   action: toggle
                 style:
@@ -137,7 +137,7 @@ views:
 
               # --- Pumpe-ikoner (bunn) ---
               - type: state-icon
-                entity: fan.arctic_spa_pump_1
+                entity: fan.boblebad_pump_1
                 tap_action:
                   action: toggle
                 style:
@@ -147,7 +147,7 @@ views:
                   "--paper-item-icon-active-color": "#4fc3f7"
                   transform: scale(1.0)
               - type: state-label
-                entity: fan.arctic_spa_pump_1
+                entity: fan.boblebad_pump_1
                 style:
                   top: 97%
                   left: 25%
@@ -156,7 +156,7 @@ views:
                 prefix: "P1"
 
               - type: state-icon
-                entity: fan.arctic_spa_pump_2
+                entity: fan.boblebad_pump_2
                 tap_action:
                   action: toggle
                 style:
@@ -166,7 +166,7 @@ views:
                   "--paper-item-icon-active-color": "#4fc3f7"
                   transform: scale(1.0)
               - type: state-label
-                entity: fan.arctic_spa_pump_2
+                entity: fan.boblebad_pump_2
                 style:
                   top: 97%
                   left: 37.5%
@@ -175,7 +175,7 @@ views:
                 prefix: "P2"
 
               - type: state-icon
-                entity: fan.arctic_spa_pump_3
+                entity: fan.boblebad_pump_3
                 tap_action:
                   action: toggle
                 style:
@@ -185,7 +185,7 @@ views:
                   "--paper-item-icon-active-color": "#4fc3f7"
                   transform: scale(1.0)
               - type: state-label
-                entity: fan.arctic_spa_pump_3
+                entity: fan.boblebad_pump_3
                 style:
                   top: 97%
                   left: 50%
@@ -194,7 +194,7 @@ views:
                 prefix: "P3"
 
               - type: state-icon
-                entity: fan.arctic_spa_pump_4
+                entity: fan.boblebad_pump_4
                 tap_action:
                   action: toggle
                 style:
@@ -204,7 +204,7 @@ views:
                   "--paper-item-icon-active-color": "#4fc3f7"
                   transform: scale(1.0)
               - type: state-label
-                entity: fan.arctic_spa_pump_4
+                entity: fan.boblebad_pump_4
                 style:
                   top: 97%
                   left: 62.5%
@@ -213,7 +213,7 @@ views:
                 prefix: "P4"
 
               - type: state-icon
-                entity: fan.arctic_spa_pump_5
+                entity: fan.boblebad_pump_5
                 tap_action:
                   action: toggle
                 style:
@@ -223,7 +223,7 @@ views:
                   "--paper-item-icon-active-color": "#4fc3f7"
                   transform: scale(1.0)
               - type: state-label
-                entity: fan.arctic_spa_pump_5
+                entity: fan.boblebad_pump_5
                 style:
                   top: 97%
                   left: 75%
@@ -237,28 +237,28 @@ views:
           - type: horizontal-stack
             cards:
               - type: button
-                entity: light.arctic_spa_light
+                entity: light.boblebad_light
                 name: Lys
                 icon: mdi:lightbulb
                 tap_action:
                   action: toggle
                 show_state: true
               - type: button
-                entity: switch.arctic_spa_stereo
+                entity: switch.boblebad_stereo
                 name: Stereo
                 icon: mdi:speaker
                 tap_action:
                   action: toggle
                 show_state: true
               - type: button
-                entity: switch.arctic_spa_onzen
+                entity: switch.boblebad_onzen
                 name: Onzen
                 icon: mdi:water-opacity
                 tap_action:
                   action: toggle
                 show_state: true
               - type: button
-                entity: switch.arctic_spa_ozone
+                entity: switch.boblebad_ozone
                 name: Ozon
                 icon: mdi:molecule
                 tap_action:
@@ -268,28 +268,28 @@ views:
           - type: horizontal-stack
             cards:
               - type: button
-                entity: switch.arctic_spa_filter
+                entity: switch.boblebad_filter
                 name: Filter
                 icon: mdi:air-filter
                 tap_action:
                   action: toggle
                 show_state: true
               - type: button
-                entity: switch.arctic_spa_exhaust_fan
+                entity: switch.boblebad_exhaust_fan
                 name: Vifte
                 icon: mdi:fan
                 tap_action:
                   action: toggle
                 show_state: true
               - type: button
-                entity: switch.arctic_spa_eco_mode
+                entity: switch.boblebad_eco_mode
                 name: Eco
                 icon: mdi:leaf
                 tap_action:
                   action: toggle
                 show_state: true
               - type: thermostat
-                entity: climate.arctic_spa_thermostat
+                entity: climate.boblebad
                 features:
                   - type: target-temperature
 
@@ -299,7 +299,7 @@ views:
           - type: horizontal-stack
             cards:
               - type: gauge
-                entity: sensor.arctic_spa_water_temperature
+                entity: sensor.boblebad_water_temperature
                 name: Vann
                 min: 20
                 max: 42
@@ -309,7 +309,7 @@ views:
                   yellow: 30
                   red: 20
               - type: gauge
-                entity: sensor.arctic_spa_power
+                entity: sensor.boblebad_power
                 name: Effekt
                 min: 0
                 max: 8
@@ -323,19 +323,19 @@ views:
             title: Status
             show_header_toggle: false
             entities:
-              - entity: sensor.arctic_spa_heater_1
+              - entity: sensor.boblebad_heater_1
                 name: Varmer 1
-              - entity: sensor.arctic_spa_heater_2
+              - entity: sensor.boblebad_heater_2
                 name: Varmer 2
-              - entity: sensor.arctic_spa_filter_status
+              - entity: sensor.boblebad_filter_status
                 name: Filter
-              - entity: sensor.arctic_spa_ozone_status
+              - entity: sensor.boblebad_ozone_status
                 name: Ozon
-              - entity: sensor.arctic_spa_ph
+              - entity: sensor.boblebad_ph
                 name: pH
-              - entity: sensor.arctic_spa_orp
+              - entity: sensor.boblebad_orp
                 name: ORP
-              - entity: sensor.arctic_spa_power_phase
+              - entity: sensor.boblebad_power_phase
                 name: Strømfase
-              - entity: sensor.arctic_spa_breaker_size
+              - entity: sensor.boblebad_breaker_size
                 name: Sikring

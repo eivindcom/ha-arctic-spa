@@ -8,4 +8,4 @@ CONNECTION_TIMEOUT = 10  # seconds
 
 # Temperature limits (Fahrenheit)
 MIN_TEMP_F = 80   # ~26.7 C
-MAX_TEMP_F = 104  # ~40.0 C
+MAX_TEMP_F = 106  # ~41.0 C

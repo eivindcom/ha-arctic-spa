@@ -40,7 +40,7 @@ class ArcticSpaClimate(ArcticSpaEntity, ClimateEntity):
     _attr_precision = 0.5
     _attr_target_temperature_step = 0.5
     _attr_min_temp = 26.7  # ~80F
-    _attr_max_temp = 40.0  # ~104F
+    _attr_max_temp = 41.0  # ~106F
     _attr_translation_key = "thermostat"
     _attr_name = None  # Use device name
 
