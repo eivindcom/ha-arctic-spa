@@ -64,8 +64,6 @@ async def async_setup_entry(
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    entry.async_on_unload(lambda: hass.async_create_task(client.disconnect()))
-
     return True
 
 
