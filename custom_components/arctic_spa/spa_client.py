@@ -108,6 +108,16 @@ class ArcticSpaClient:
             self._read_task = asyncio.create_task(self._read_loop())
             self._poll_task = asyncio.create_task(self._poll_loop())
 
+            # Request configuration immediately (don't wait for poll cycle)
+            try:
+                packet = create_packet(
+                    MessageType.CONFIGURATION, None, self._sequence
+                )
+                self._writer.write(packet)
+                self._sequence += 1
+            except OSError:
+                pass
+
             return True
         except (OSError, asyncio.TimeoutError) as err:
             _LOGGER.error("Failed to connect to spa at %s:%s: %s", self.host, self.port, err)
